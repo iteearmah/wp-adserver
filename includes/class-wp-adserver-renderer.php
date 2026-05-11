@@ -91,7 +91,7 @@ class WP_AdServer_Renderer {
 			if ( $geo_enabled ) {
 				$mode      = get_field( 'wp_ad_geo_mode', $ad_id );
 				$countries = get_field( 'wp_ad_geo_countries', $ad_id );
-				$country_list = array_map( 'trim', explode( ',', strtoupper( $countries ) ) );
+				$country_list = is_array( $countries ) ? array_map( 'strtoupper', $countries ) : array_map( 'trim', explode( ',', strtoupper( $countries ) ) );
 
 				if ( $mode === 'include' ) {
 					if ( ! in_array( $visitor_country, $country_list ) ) continue;

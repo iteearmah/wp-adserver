@@ -7,13 +7,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WP_AdServer_Admin {
 
 	public static function init() {
-		add_action( 'add_meta_boxes', array( __CLASS__, 'add_stats_meta_box' ) );
+		add_action( 'add_meta_boxes', array( __CLASS__, 'add_stats_meta_box' ), 10, 2 );
 		add_filter( 'manage_wp_ad_posts_columns', array( __CLASS__, 'add_custom_columns' ) );
 		add_action( 'manage_wp_ad_posts_custom_column', array( __CLASS__, 'render_custom_columns' ), 10, 2 );
 		add_filter( 'manage_edit-wp_ad_sortable_columns', array( __CLASS__, 'make_columns_sortable' ) );
 	}
 
-	public static function add_stats_meta_box() {
+	public static function add_stats_meta_box( $post_type, $post ) {
+		// Only show stats on existing ads, not when creating a new one
+		if ( 'wp_ad' !== $post_type || ! $post instanceof WP_Post || 'auto-draft' === $post->post_status ) {
+			return;
+		}
+
 		add_meta_box(
 			'wp_ad_stats',
 			'Ad Statistics (Last 7 Days)',
