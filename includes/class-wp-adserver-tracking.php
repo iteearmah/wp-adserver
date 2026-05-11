@@ -73,9 +73,9 @@ class WP_AdServer_Tracking {
 	public static function handle_script_request() {
 		if ( isset( $_GET['wp_ad_serve'] ) ) {
 			header( 'Content-Type: application/javascript' );
-			$zone = isset( $_GET['zone'] ) ? sanitize_text_field( $_GET['zone'] ) : '';
+			$zone = isset( $_GET['zone'] ) ? sanitize_text_field( wp_unslash( $_GET['zone'] ) ) : '';
 			$ad_html = WP_AdServer_Renderer::render_ad( $zone );
-			echo "document.write(" . json_encode( $ad_html ) . ");";
+			echo "document.write(" . wp_json_encode( $ad_html ) . ");";
 			exit;
 		}
 	}

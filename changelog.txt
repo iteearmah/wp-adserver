@@ -13,3 +13,15 @@
 * Ad scheduling and performance capping (impressions/clicks).
 * Zone-based ad delivery.
 * Detailed impression and click tracking with admin dashboard statistics.
+
+1.1.0 - 2026-05-11
+- Security: Added nonce verification and capability checks for settings.
+- Best Practice: Improved input sanitization and output escaping.
+- I18n: Added translation wrappers for core strings.
+- UI/UX: Refined admin notices and simplified the readme changelog.
+- Updated Access Configuration with user selection and SCF dependency enforcement.
+
+1.0.0 - 2026-05-01
+- Initial release.
+- Modular architecture.
+- Scheduling, Capping, and Geo-targeting.

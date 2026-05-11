@@ -23,6 +23,10 @@ class WP_AdServer_Access {
 	}
 
 	public static function check_user_whitelist( $allcaps, $caps, $args ) {
+		if ( ! is_user_logged_in() ) {
+			return $allcaps;
+		}
+
 		// Only intercept our custom capabilities
 		$ad_caps = array_keys( self::get_capabilities() );
 		$intercept = false;
@@ -110,7 +114,7 @@ class WP_AdServer_Access {
 
 	public static function render_settings_page() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'wp-adserver' ) );
 		}
 
 		if ( ! function_exists( 'acf_render_field_wrap' ) ) {
@@ -127,7 +131,8 @@ class WP_AdServer_Access {
 				// We need to manually update the field since we are not using acf_form()
 				$field_key = 'field_wp_adserver_allowed_users_list';
 				if ( isset( $_POST['acf'][$field_key] ) ) {
-					update_field( $field_key, $_POST['acf'][$field_key], 'option' );
+					$acf_value = wp_unslash( $_POST['acf'][$field_key] );
+					update_field( $field_key, $acf_value, 'option' );
 				}
 			}
 
@@ -229,7 +234,11 @@ class WP_AdServer_Access {
 	}
 
 	private static function save_role_caps() {
-		$submitted_caps = isset( $_POST['role_caps'] ) ? $_POST['role_caps'] : array();
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$submitted_caps = isset( $_POST['role_caps'] ) ? (array) $_POST['role_caps'] : array();
 		$roles = wp_roles();
 		$available_caps = self::get_capabilities();
 
@@ -250,7 +259,11 @@ class WP_AdServer_Access {
 	}
 
 	private static function save_allowed_users() {
-		$allowed_users = isset( $_POST['wp_adserver_allowed_users'] ) ? sanitize_text_field( $_POST['wp_adserver_allowed_users'] ) : '';
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$allowed_users = isset( $_POST['wp_adserver_allowed_users'] ) ? sanitize_text_field( wp_unslash( $_POST['wp_adserver_allowed_users'] ) ) : '';
 		update_option( 'wp_adserver_allowed_users', $allowed_users );
 	}
 

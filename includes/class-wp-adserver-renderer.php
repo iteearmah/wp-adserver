@@ -125,7 +125,8 @@ class WP_AdServer_Renderer {
 				esc_url( $image_url )
 			);
 		} else {
-			$output = '<div class="wp-adserver-ad">' . get_field( 'wp_ad_html_code', $selected_ad_id ) . '</div>';
+			$html_code = get_field( 'wp_ad_html_code', $selected_ad_id );
+			$output = '<div class="wp-adserver-ad">' . wp_kses_post( $html_code ) . '</div>';
 		}
 
 		return $output;

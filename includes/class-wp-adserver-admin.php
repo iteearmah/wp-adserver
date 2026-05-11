@@ -26,22 +26,22 @@ class WP_AdServer_Admin {
 
 	public static function render_stats_meta_box( $post ) {
 		echo '<table class="widefat fixed striped">';
-		echo '<thead><tr><th>Date</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>Top Countries</th></tr></thead>';
+		echo '<thead><tr><th>' . esc_html__( 'Date', 'wp-adserver' ) . '</th><th>' . esc_html__( 'Impressions', 'wp-adserver' ) . '</th><th>' . esc_html__( 'Clicks', 'wp-adserver' ) . '</th><th>' . esc_html__( 'CTR', 'wp-adserver' ) . '</th><th>' . esc_html__( 'Top Countries', 'wp-adserver' ) . '</th></tr></thead>';
 		echo '<tbody>';
 
 		for ( $i = 0; $i < 7; $i++ ) {
-			$date       = date( 'Y-m-d', strtotime( "-$i days" ) );
+			$date       = gmdate( 'Y-m-d', strtotime( "-$i days" ) );
 			$stats      = get_post_meta( $post->ID, '_wp_ad_stats_' . $date, true ) ?: array();
-			$imprs      = isset( $stats['impression'] ) ? $stats['impression'] : 0;
-			$clicks     = isset( $stats['click'] ) ? $stats['click'] : 0;
+			$imprs      = isset( $stats['impression'] ) ? intval( $stats['impression'] ) : 0;
+			$clicks     = isset( $stats['click'] ) ? intval( $stats['click'] ) : 0;
 			$ctr        = $imprs > 0 ? round( ( $clicks / $imprs ) * 100, 2 ) : 0;
-			$countries  = isset( $stats['countries'] ) ? $stats['countries'] : array();
+			$countries  = isset( $stats['countries'] ) ? (array) $stats['countries'] : array();
 			arsort( $countries );
 			$top_countries = array_slice( array_keys( $countries ), 0, 3 );
-			$geo_display   = implode( ', ', $top_countries ) ?: '-';
+			$geo_display   = implode( ', ', array_map( 'esc_html', $top_countries ) ) ?: '-';
 
 			echo '<tr>';
-			echo '<td>' . esc_html( $date ) . ( $i === 0 ? ' (Today)' : '' ) . '</td>';
+			echo '<td>' . esc_html( $date ) . ( $i === 0 ? ' (' . esc_html__( 'Today', 'wp-adserver' ) . ')' : '' ) . '</td>';
 			echo '<td>' . esc_html( $imprs ) . '</td>';
 			echo '<td>' . esc_html( $clicks ) . '</td>';
 			echo '<td>' . esc_html( $ctr ) . '%</td>';
@@ -56,10 +56,10 @@ class WP_AdServer_Admin {
 		$new_columns = array();
 		foreach ( $columns as $key => $value ) {
 			if ( $key === 'date' ) {
-				$new_columns['impressions'] = 'Impressions';
-				$new_columns['clicks'] = 'Clicks';
-				$new_columns['ctr'] = 'CTR';
-				$new_columns['weight'] = 'Weight';
+				$new_columns['impressions'] = esc_html__( 'Impressions', 'wp-adserver' );
+				$new_columns['clicks']      = esc_html__( 'Clicks', 'wp-adserver' );
+				$new_columns['ctr']         = esc_html__( 'CTR', 'wp-adserver' );
+				$new_columns['weight']      = esc_html__( 'Weight', 'wp-adserver' );
 			}
 			$new_columns[ $key ] = $value;
 		}

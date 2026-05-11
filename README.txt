@@ -44,11 +44,8 @@ Statistics for each ad are displayed in the "Ad Statistics" meta box when editin
 == Changelog ==
 
 = 1.1.0 =
-* Improved Access Configuration with user selection.
-* Added dependency enforcement for SCF.
-* UI/UX enhancements.
-
-= 1.0.0 =
-* Initial release.
-* Modular architecture.
-* Scheduling, Capping, and Geo-targeting.
+* Security: Added nonce verification and capability checks for settings.
+* Best Practice: Improved input sanitization and output escaping.
+* I18n: Added translation wrappers for core strings.
+* UI/UX: Refined admin notices and simplified the readme changelog.
+* Updated Access Configuration with user selection and SCF dependency enforcement.

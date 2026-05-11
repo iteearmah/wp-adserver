@@ -37,16 +37,17 @@ function wp_adserver_scf_missing_notice() {
 	}
 
 	$screen = get_current_screen();
-	if ( $screen->parent_base === 'edit.php?post_type=wp_ad' || $screen->id === 'plugins' ) {
-		?>
-		<div class="notice notice-error">
-			<p><?php _e( '<strong>WP AdServer</strong> requires the <strong>Secure Custom Fields</strong> (formerly ACF) plugin to be installed and active for full functionality.', 'wp-adserver' ); ?></p>
-			<p>
-				<a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=search&s=secure+custom+fields' ) ); ?>" class="button button-primary"><?php _e( 'Install Secure Custom Fields', 'wp-adserver' ); ?></a>
-			</p>
-		</div>
-		<?php
+	if ( ! $screen || ( $screen->parent_base !== 'edit.php?post_type=wp_ad' && $screen->id !== 'plugins' ) ) {
+		return;
 	}
+	?>
+	<div class="notice notice-error is-dismissible">
+		<p><?php echo wp_kses_post( __( '<strong>WP AdServer</strong> requires the <strong>Secure Custom Fields</strong> (formerly ACF) plugin to be installed and active for full functionality.', 'wp-adserver' ) ); ?></p>
+		<p>
+			<a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=search&s=secure+custom+fields' ) ); ?>" class="button button-primary"><?php esc_html_e( 'Install Secure Custom Fields', 'wp-adserver' ); ?></a>
+		</p>
+	</div>
+	<?php
 }
 
 /**
