@@ -27,6 +27,5 @@ class WP_AdServer_Loader {
 		WP_AdServer_Renderer::init();
 		WP_AdServer_Admin::init();
 		WP_AdServer_Access::init();
-		WP_AdServer_Access::add_admin_caps();
 	}
 }

@@ -7,10 +7,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WP_AdServer_Access {
 
 	public static function init() {
-		add_action( 'admin_menu', array( __CLASS__, 'add_settings_page' ) );
 		add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
+		add_action( 'admin_menu', array( __CLASS__, 'add_settings_page' ) );
 		add_filter( 'user_has_cap', array( __CLASS__, 'check_user_whitelist' ), 10, 3 );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_admin_assets' ) );
+		add_action( 'init', array( __CLASS__, 'add_admin_caps' ) );
 	}
 
 	public static function enqueue_admin_assets( $hook ) {
@@ -18,11 +19,25 @@ class WP_AdServer_Access {
 			return;
 		}
 
+		if ( function_exists( 'acf_enqueue_scripts' ) ) {
+			acf_enqueue_scripts();
+		}
+
 		wp_enqueue_style( 'wp-adserver-admin-css', plugins_url( '../assets/css/admin.css', __FILE__ ) );
 		wp_enqueue_script( 'wp-adserver-admin-js', plugins_url( '../assets/js/admin.js', __FILE__ ), array( 'jquery' ), '1.0', true );
 	}
 
 	public static function check_user_whitelist( $allcaps, $caps, $args ) {
+		// Admins always have access, regardless of whitelist.
+		// We explicitly grant them our custom capabilities here to ensure visibility
+		// even if the database-level role capabilities are not yet synchronized.
+		if ( ! empty( $allcaps['manage_options'] ) || ! empty( $allcaps['administrator'] ) ) {
+			foreach ( self::get_capabilities() as $cap => $label ) {
+				$allcaps[ $cap ] = true;
+			}
+			return $allcaps;
+		}
+
 		if ( ! is_user_logged_in() ) {
 			return $allcaps;
 		}
@@ -56,11 +71,6 @@ class WP_AdServer_Access {
 			return $allcaps;
 		}
 
-		// Admins always have access
-		if ( in_array( 'administrator', $current_user->roles ) ) {
-			return $allcaps;
-		}
-
 		$is_allowed = false;
 		if ( ! empty( $allowed_user_ids ) && is_array( $allowed_user_ids ) ) {
 			if ( in_array( $current_user->ID, $allowed_user_ids ) ) {
@@ -85,31 +95,51 @@ class WP_AdServer_Access {
 
 	public static function get_capabilities() {
 		return array(
-			'edit_ad'          => 'Edit Ad',
-			'read_ad'          => 'Read Ad',
-			'delete_ad'        => 'Delete Ad',
-			'edit_ads'         => 'Edit Ads',
-			'edit_others_ads'  => 'Edit Others Ads',
-			'publish_ads'      => 'Publish Ads',
-			'read_private_ads' => 'Read Private Ads',
-			'delete_ads'       => 'Delete Ads',
-		);
-	}
-
-	public static function add_settings_page() {
-		add_submenu_page(
-			'edit.php?post_type=wp_ad',
-			'Access Configuration',
-			'Access Settings',
-			'manage_options',
-			'wp-adserver-access',
-			array( __CLASS__, 'render_settings_page' )
+			'edit_ad'               => 'Edit Ad',
+			'read_ad'               => 'Read Ad',
+			'delete_ad'             => 'Delete Ad',
+			'edit_ads'              => 'Edit Ads',
+			'edit_others_ads'       => 'Edit Others Ads',
+			'publish_ads'           => 'Publish Ads',
+			'read_private_ads'      => 'Read Private Ads',
+			'edit_private_ads'      => 'Edit Private Ads',
+			'edit_published_ads'    => 'Edit Published Ads',
+			'delete_ads'            => 'Delete Ads',
+			'delete_others_ads'     => 'Delete Others Ads',
+			'delete_private_ads'    => 'Delete Private Ads',
+			'delete_published_ads'  => 'Delete Published Ads',
 		);
 	}
 
 	public static function register_settings() {
 		register_setting( 'wp_adserver_access_group', 'wp_adserver_role_caps' );
 		register_setting( 'wp_adserver_access_group', 'wp_adserver_allowed_users' );
+
+		// Register the SCF/ACF options page slug so it's recognized
+		if ( function_exists( 'acf_add_options_page' ) ) {
+			acf_add_options_sub_page( array(
+				'page_title'  => 'Access Configuration',
+				'menu_title'  => 'Access Settings',
+				'parent_slug' => 'edit.php?post_type=wp_ad',
+				'menu_slug'   => 'wp-adserver-access',
+				'capability'  => 'manage_options',
+				'redirect'    => false,
+			) );
+		}
+	}
+
+	public static function add_settings_page() {
+		// If ACF is not active, we still need the submenu page
+		if ( ! function_exists( 'acf_add_options_page' ) ) {
+			add_submenu_page(
+				'edit.php?post_type=wp_ad',
+				'Access Configuration',
+				'Access Settings',
+				'manage_options',
+				'wp-adserver-access',
+				array( __CLASS__, 'render_settings_page' )
+			);
+		}
 	}
 
 	public static function render_settings_page() {
@@ -117,7 +147,10 @@ class WP_AdServer_Access {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'wp-adserver' ) );
 		}
 
-		if ( ! function_exists( 'acf_render_field_wrap' ) ) {
+		// Ensure SCF is fully ready if available
+		if ( function_exists( 'acf_render_field_wrap' ) ) {
+			acf_enqueue_scripts();
+		} else {
 			echo '<div class="notice notice-error"><p>' . esc_html__( 'The Secure Custom Fields plugin must be active to manage access settings.', 'wp-adserver' ) . '</p></div>';
 			return;
 		}
@@ -168,16 +201,24 @@ class WP_AdServer_Access {
 										<th scope="row">Allowed Users</th>
 										<td>
 											<?php
-											acf_render_field_wrap( array(
-												'key'           => 'field_wp_adserver_allowed_users_list',
-												'label'         => 'Allowed Users',
-												'name'          => 'acf[field_wp_adserver_allowed_users_list]',
-												'type'          => 'user',
-												'return_format' => 'id',
-												'multiple'      => 1,
-												'allow_null'    => 1,
-												'value'         => get_field( 'wp_adserver_allowed_users_list', 'option' ),
-											) );
+											$field = acf_get_field( 'field_wp_adserver_allowed_users_list' );
+											if ( $field ) {
+												$field['name']  = 'acf[field_wp_adserver_allowed_users_list]';
+												$field['value'] = get_field( 'wp_adserver_allowed_users_list', 'option' );
+												acf_render_field_wrap( $field );
+											} else {
+												// Fallback if field not found for some reason
+												acf_render_field_wrap( array(
+													'key'           => 'field_wp_adserver_allowed_users_list',
+													'label'         => 'Allowed Users',
+													'name'          => 'acf[field_wp_adserver_allowed_users_list]',
+													'type'          => 'user',
+													'return_format' => 'id',
+													'multiple'      => 1,
+													'allow_null'    => 1,
+													'value'         => get_field( 'wp_adserver_allowed_users_list', 'option' ),
+												) );
+											}
 											?>
 										</td>
 									</tr>
@@ -208,12 +249,18 @@ class WP_AdServer_Access {
 									</thead>
 									<tbody>
 										<?php foreach ( $roles as $role_key => $role_data ) : ?>
-											<?php if ( $role_key === 'administrator' ) continue; ?>
 											<tr>
 												<td class="role-name"><strong><?php echo esc_html( $role_data['name'] ); ?></strong></td>
 												<?php foreach ( $caps as $cap => $label ) : ?>
 													<td class="cap-check">
-														<input type="checkbox" name="role_caps[<?php echo esc_attr( $role_key ); ?>][<?php echo esc_attr( $cap ); ?>]" value="1" <?php checked( isset( $role_data['capabilities'][ $cap ] ) && $role_data['capabilities'][ $cap ] ); ?>>
+														<?php
+														$is_admin = ( $role_key === 'administrator' );
+														$checked  = isset( $role_data['capabilities'][ $cap ] ) && $role_data['capabilities'][ $cap ];
+														if ( $is_admin ) {
+															$checked = true; // Admins always have it
+														}
+														?>
+														<input type="checkbox" name="role_caps[<?php echo esc_attr( $role_key ); ?>][<?php echo esc_attr( $cap ); ?>]" value="1" <?php checked( $checked ); ?> <?php disabled( $is_admin ); ?>>
 													</td>
 												<?php endforeach; ?>
 											</tr>

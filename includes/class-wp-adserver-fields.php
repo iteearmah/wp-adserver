@@ -170,7 +170,7 @@ class WP_AdServer_Fields {
 							array(
 								'field'    => 'field_wp_ad_geo_enabled',
 								'operator' => '==',
-								'value'    => '1',
+   					'value'    => '1',
 							),
 						),
 					),
@@ -186,6 +186,38 @@ class WP_AdServer_Fields {
 				),
 			),
 		) );
+
+		acf_add_local_field_group( array(
+			'key'      => 'group_wp_ad_zone_details',
+			'title'    => 'Zone Details',
+			'fields'   => array(
+				array(
+					'key'   => 'field_wp_ad_zone_dimensions',
+					'label' => 'Zone Dimensions',
+					'name'  => 'wp_ad_zone_dimensions',
+					'type'  => 'text',
+					'instructions' => 'e.g., 728x90, 300x250. This is for reference and can be used in your theme.',
+					'placeholder'  => 'Width x Height',
+				),
+				array(
+					'key'   => 'field_wp_ad_zone_description',
+					'label' => 'Zone Description',
+					'name'  => 'wp_ad_zone_description',
+					'type'  => 'textarea',
+					'rows'  => 3,
+				),
+			),
+			'location' => array(
+				array(
+					array(
+						'param'    => 'taxonomy',
+						'operator' => '==',
+						'value'    => 'ad_zone',
+					),
+				),
+			),
+		) );
+
 		acf_add_local_field_group( array(
 			'key'      => 'group_wp_ad_access_settings',
 			'title'    => 'Access Settings',
@@ -200,6 +232,7 @@ class WP_AdServer_Fields {
 					'return_format' => 'id',
 					'multiple'      => 1,
 					'allow_null'    => 1,
+					'ui'            => 1,
 				),
 			),
 			'location' => array(

@@ -36,10 +36,17 @@ Key features include:
 == Frequently Asked Questions ==
 
 = How do I display an ad? =
-Use the shortcode `[wp_adserver zone="your-zone-slug"]` in any post or page.
+Use the shortcode `[wp_adserver zone="your-zone-slug"]` in any post or page. To find the zone slug, go to **WP AdServer > Ad Zones**.
 
 = How do I track statistics? =
 Statistics for each ad are displayed in the "Ad Statistics" meta box when editing an ad, as well as in the main Ads list view.
+
+= How do I use Ad Zones? =
+1. Go to **WP AdServer > Ad Zones** and create a new zone (e.g., "Sidebar").
+2. Note the **Slug** of the zone you created.
+3. Edit an advertisement and select the zone from the **Ad Zones** box on the right.
+4. Use the shortcode `[wp_adserver zone="sidebar"]` (replace "sidebar" with your slug) to display ads from that zone.
+5. You can also use `<script src="your-site-url/?wp_ad_serve=1&zone=sidebar"></script>` for remote placement.
 
 == Changelog ==
 

@@ -11,6 +11,55 @@ class WP_AdServer_Admin {
 		add_filter( 'manage_wp_ad_posts_columns', array( __CLASS__, 'add_custom_columns' ) );
 		add_action( 'manage_wp_ad_posts_custom_column', array( __CLASS__, 'render_custom_columns' ), 10, 2 );
 		add_filter( 'manage_edit-wp_ad_sortable_columns', array( __CLASS__, 'make_columns_sortable' ) );
+
+		// Ad Zone Taxonomy columns
+		add_filter( 'manage_edit-ad_zone_columns', array( __CLASS__, 'add_zone_columns' ) );
+		add_action( 'manage_ad_zone_custom_column', array( __CLASS__, 'render_zone_columns' ), 10, 3 );
+
+		// Custom upload folder for ads
+		add_filter( 'wp_handle_upload_prefilter', array( __CLASS__, 'handle_upload_prefilter' ) );
+
+		// Redirect to ads list after publishing/saving
+		add_filter( 'redirect_post_location', array( __CLASS__, 'redirect_after_save' ), 10, 2 );
+	}
+
+	public static function redirect_after_save( $location, $post_id ) {
+		if ( get_post_type( $post_id ) === 'wp_ad' && isset( $_POST['publish'] ) ) {
+			// Only redirect to list if it was a new post being published
+			if ( isset( $_POST['original_post_status'] ) && $_POST['original_post_status'] === 'auto-draft' ) {
+				$location = admin_url( 'edit.php?post_type=wp_ad' );
+			}
+		}
+		return $location;
+	}
+
+	public static function handle_upload_prefilter( $file ) {
+		if ( isset( $_REQUEST['post_id'] ) ) {
+			$post_id = intval( $_REQUEST['post_id'] );
+			if ( get_post_type( $post_id ) === 'wp_ad' ) {
+				add_filter( 'upload_dir', array( __CLASS__, 'custom_upload_dir' ) );
+			}
+		} elseif ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] === 'upload-attachment' ) {
+			// This might be an AJAX upload from the media library, we check the context if possible
+			// SCF uses the standard media library. We can check if it's coming from our post type.
+			$referer = wp_get_referer();
+			if ( $referer && strpos( $referer, 'post_type=wp_ad' ) !== false ) {
+				add_filter( 'upload_dir', array( __CLASS__, 'custom_upload_dir' ) );
+			}
+		}
+		return $file;
+	}
+
+	public static function custom_upload_dir( $uploads ) {
+		$subdir = '/wp-adserver';
+		$uploads['subdir'] = $subdir . $uploads['subdir'];
+		$uploads['path']   = $uploads['basedir'] . $uploads['subdir'];
+		$uploads['url']    = $uploads['baseurl'] . $uploads['subdir'];
+
+		// Remove the filter after use to avoid affecting other uploads in the same request if any
+		remove_filter( 'upload_dir', array( __CLASS__, 'custom_upload_dir' ) );
+
+		return $uploads;
 	}
 
 	public static function add_stats_meta_box( $post_type, $post ) {
@@ -97,5 +146,33 @@ class WP_AdServer_Admin {
 		$columns['clicks'] = 'clicks';
 		$columns['weight'] = 'weight';
 		return $columns;
+	}
+
+	public static function add_zone_columns( $columns ) {
+		$columns['zone_shortcode'] = esc_html__( 'Shortcode', 'wp-adserver' );
+		$columns['zone_script']    = esc_html__( 'Script Tag', 'wp-adserver' );
+		return $columns;
+	}
+
+	public static function render_zone_columns( $content, $column_name, $term_id ) {
+		$term = get_term( $term_id, 'ad_zone' );
+		if ( ! $term || is_wp_error( $term ) ) {
+			return $content;
+		}
+
+		$slug = $term->slug;
+
+		switch ( $column_name ) {
+			case 'zone_shortcode':
+				return '<code>[wp_adserver zone="' . esc_attr( $slug ) . '"]</code>';
+			case 'zone_script':
+				$url = add_query_arg( array(
+					'wp_ad_serve' => 1,
+					'zone'        => $slug,
+				), home_url( '/' ) );
+				return '<code>&lt;script src="' . esc_url( $url ) . '"&gt;&lt;/script&gt;</code>';
+		}
+
+		return $content;
 	}
 }
