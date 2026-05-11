@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+vendor/
+
+# WordPress
+wp-config.php
+wp-content/uploads/
+wp-content/blogs.dir/
+wp-content/upgrade/
+wp-content/backup-db/
+*.log
+.htaccess
+sitemap.xml
+sitemap.xml.gz
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/
+
+# Build/Deploy
+.github/
+.distignore
+composer.lock
+package-lock.json

@@ -1,0 +1,15 @@
+= 1.1.0 =
+* Migrated the "Allowed Usernames" whitelist to a modern user selection system using Secure Custom Fields (SCF).
+* Enhanced security and reliability by switching from username-based filtering to user ID-based filtering.
+* Implemented a dependency enforcement system to ensure the "Secure Custom Fields" (SCF) plugin is installed and active.
+* Improved UI/UX with a tabbed interface and modernized styling for the Access Settings page.
+
+= 1.0.0 =
+* Initial release.
+* Modular architecture for better maintainability.
+* Custom post type `wp_ad` for structured ad management.
+* Weighted rotation system using `[wp_adserver]` shortcode.
+* Advanced Geo-targeting capabilities.
+* Ad scheduling and performance capping (impressions/clicks).
+* Zone-based ad delivery.
+* Detailed impression and click tracking with admin dashboard statistics.

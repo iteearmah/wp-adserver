@@ -1,0 +1,21 @@
+{
+    "name": "iteearmah/wp-adserver",
+    "description": "A specialized plugin to manage, rotate, track, and serve advertisements.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Samuel Attoh Armah",
+            "email": "iteearmah@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "WP_AdServer\\": "includes/"
+        }
+    }
+}

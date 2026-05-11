@@ -1,0 +1,66 @@
+.wp-adserver-settings .card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.wp-adserver-settings .nav-tab-wrapper {
+    margin-top: 20px;
+}
+
+.wp-adserver-settings .matrix-container table {
+    margin-top: 10px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.wp-adserver-settings .matrix-container th.cap-column {
+    text-align: center;
+    vertical-align: middle;
+    font-size: 11px;
+    padding: 10px 5px;
+}
+
+.wp-adserver-settings .matrix-container td.cap-check {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.wp-adserver-settings .matrix-container td.cap-check input[type="checkbox"] {
+    margin: 0;
+}
+
+.wp-adserver-settings .role-name {
+    width: 150px;
+    font-size: 14px;
+}
+
+.wp-adserver-settings .description {
+    font-style: italic;
+    color: #646970;
+}
+
+.wp-adserver-settings .button-hero {
+    margin-top: 20px !important;
+}
+
+.wp-adserver-settings tr:hover td {
+    background-color: #f0f6fb !important;
+}
+
+.wp-adserver-settings .matrix-container th {
+    background: #f6f7f7;
+}
+
+/* SCF Field Adjustments */
+.wp-adserver-settings .acf-field {
+    border-top: none !important;
+    padding: 10px 0 !important;
+}
+
+.wp-adserver-settings .acf-label label {
+    font-weight: 600;
+}
