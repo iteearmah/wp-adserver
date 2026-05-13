@@ -18,10 +18,17 @@ Key features include:
 * **Ad Rotation:** Weighted rotation system to serve ads based on priority.
 * **Tracking:** Detailed tracking of impressions and clicks with 7-day statistics.
 * **Geo-Targeting:** Include or exclude ads based on the visitor's country.
+* **Device Targeting:** Target ads based on the visitor's device (Mobile, Tablet, Desktop).
 * **Ad Zones:** Group ads into zones for targeted placement.
 * **Scheduling:** Set start and end dates for your ad campaigns.
 * **Capping:** Set impression and click limits for each ad.
+* **Duplicate Ads:** Quickly clone existing advertisements with one click.
+* **Ad Status Toggle:** Easily enable or disable ads without deleting them.
+* **Dashboard Widget:** Quick overview of total impressions, clicks, and CTR on your WordPress dashboard.
+* **Export/Import:** Backup or migrate your advertisements and settings via JSON files.
 * **User Access Control:** Granular control over who can manage ads.
+* **Analytics Reports:** Professional reporting dashboard with charts and CSV export.
+* **AJAX Serving:** Uses native WordPress AJAX for non-blocking, asynchronous ad delivery.
 * **Shortcode Support:** Easily place ads using shortcodes or script tags.
 
 **Note:** This plugin requires the [Secure Custom Fields](https://wordpress.org/plugins/smart-custom-fields/) plugin to be installed and active.
@@ -46,7 +53,7 @@ Statistics for each ad are displayed in the "Ad Statistics" meta box when editin
 2. Note the **Slug** of the zone you created.
 3. Edit an advertisement and select the zone from the **Ad Zones** box on the right.
 4. Use the shortcode `[wp_adserver zone="sidebar"]` (replace "sidebar" with your slug) to display ads from that zone.
-5. You can also use `<script src="your-site-url/?wp_ad_serve=1&zone=sidebar"></script>` for remote placement.
+5. You can also use `<div id="wp-ad-sidebar"></div><script src="https://your-site.com/?wp_ad_serve=1&zone=sidebar&uid=wp-ad-sidebar" async></script>` for remote placement.
 
 == Changelog ==
 
@@ -56,3 +63,8 @@ Statistics for each ad are displayed in the "Ad Statistics" meta box when editin
 * I18n: Added translation wrappers for core strings.
 * UI/UX: Refined admin notices and simplified the readme changelog.
 * Updated Access Configuration with user selection and SCF dependency enforcement.
+* Added "Duplicate Ad" functionality to the Ads list view.
+* Added "Active" toggle for advertisements.
+* Added "WP AdServer Quick Stats" Dashboard Widget.
+* Added Export/Import tools for advertisements and settings.
+* Improved Ads list table with an "Active" status indicator.

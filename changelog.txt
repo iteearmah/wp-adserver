@@ -14,7 +14,11 @@
 * Zone-based ad delivery.
 * Detailed impression and click tracking with admin dashboard statistics.
 
-1.1.0 - 2026-05-11
+1.1.0 - 2026-05-12
+- Analytics: Added a professional reporting dashboard with interactive charts.
+- Export: Implemented CSV export functionality for reporting data.
+- Scalability: Migrated tracking to a custom database table for high-traffic performance.
+- Features: Added duplicate ad, ad status toggle, and dashboard stats widget.
 - Security: Added nonce verification and capability checks for settings.
 - Best Practice: Improved input sanitization and output escaping.
 - I18n: Added translation wrappers for core strings.

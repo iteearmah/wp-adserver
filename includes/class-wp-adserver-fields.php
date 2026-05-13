@@ -20,6 +20,16 @@ class WP_AdServer_Fields {
 			'title'    => 'Ad Details',
 			'fields'   => array(
 				array(
+					'key'           => 'field_wp_ad_active',
+					'label'         => 'Active',
+					'name'          => 'wp_ad_active',
+					'type'          => 'true_false',
+					'default_value' => 1,
+					'ui'            => 1,
+					'ui_on_text'    => 'Active',
+					'ui_off_text'   => 'Inactive',
+				),
+				array(
 					'key'           => 'field_wp_ad_type',
 					'label'         => 'Ad Type',
 					'name'          => 'wp_ad_type',
@@ -170,7 +180,41 @@ class WP_AdServer_Fields {
 							array(
 								'field'    => 'field_wp_ad_geo_enabled',
 								'operator' => '==',
-   					'value'    => '1',
+								'value'    => '1',
+							),
+						),
+					),
+				),
+				array(
+					'key'   => 'field_wp_ad_device_heading',
+					'label' => 'Device Targeting',
+					'type'  => 'accordion',
+				),
+				array(
+					'key'           => 'field_wp_ad_device_enabled',
+					'label'         => 'Enable Device Targeting',
+					'name'          => 'wp_ad_device_enabled',
+					'type'          => 'true_false',
+					'ui'            => 1,
+					'default_value' => 0,
+				),
+				array(
+					'key'               => 'field_wp_ad_device_types',
+					'label'             => 'Target Devices',
+					'name'              => 'wp_ad_device_types',
+					'type'              => 'checkbox',
+					'choices'           => array(
+						'mobile'  => 'Mobile',
+						'tablet'  => 'Tablet',
+						'desktop' => 'Desktop',
+					),
+					'layout'            => 'horizontal',
+					'conditional_logic' => array(
+						array(
+							array(
+								'field'    => 'field_wp_ad_device_enabled',
+								'operator' => '==',
+								'value'    => '1',
 							),
 						),
 					),

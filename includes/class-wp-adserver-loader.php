@@ -18,6 +18,7 @@ class WP_AdServer_Loader {
 		require_once plugin_dir_path( __FILE__ ) . 'class-wp-adserver-renderer.php';
 		require_once plugin_dir_path( __FILE__ ) . 'class-wp-adserver-admin.php';
 		require_once plugin_dir_path( __FILE__ ) . 'class-wp-adserver-access.php';
+		require_once plugin_dir_path( __FILE__ ) . 'class-wp-adserver-reports.php';
 	}
 
 	private function init_components() {
@@ -27,5 +28,6 @@ class WP_AdServer_Loader {
 		WP_AdServer_Renderer::init();
 		WP_AdServer_Admin::init();
 		WP_AdServer_Access::init();
+		WP_AdServer_Reports::init();
 	}
 }

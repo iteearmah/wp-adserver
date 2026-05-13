@@ -23,8 +23,8 @@ class WP_AdServer_Access {
 			acf_enqueue_scripts();
 		}
 
-		wp_enqueue_style( 'wp-adserver-admin-css', plugins_url( '../assets/css/admin.css', __FILE__ ) );
-		wp_enqueue_script( 'wp-adserver-admin-js', plugins_url( '../assets/js/admin.js', __FILE__ ), array( 'jquery' ), '1.0', true );
+		wp_enqueue_style( 'wp-adserver-admin-css', plugins_url( '../assets/css/admin.css', __FILE__ ), array(), '1.1.0' );
+		wp_enqueue_script( 'wp-adserver-admin-js', plugins_url( '../assets/js/admin.js', __FILE__ ), array( 'jquery' ), '1.1.0', true );
 	}
 
 	public static function check_user_whitelist( $allcaps, $caps, $args ) {
@@ -234,7 +234,7 @@ class WP_AdServer_Access {
 							</table>
 						</div>
 					<?php else : ?>
-						<div class="card" style="max-width: 100%;">
+						<div class="card">
 							<h2>Role Permissions Matrix</h2>
 							<p class="description">Configure which capabilities each role should have for managing advertisements.</p>
 							<div class="matrix-container" style="overflow-x: auto;">

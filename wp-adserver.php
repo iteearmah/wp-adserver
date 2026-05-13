@@ -58,4 +58,13 @@ function wp_adserver_init() {
 	new WP_AdServer_Loader();
 }
 
+/**
+ * Activate the plugin
+ */
+function wp_adserver_activate() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wp-adserver-tracking.php';
+	WP_AdServer_Tracking::create_tables();
+}
+register_activation_hook( __FILE__, 'wp_adserver_activate' );
+
 wp_adserver_init();
