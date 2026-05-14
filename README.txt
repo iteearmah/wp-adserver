@@ -2,7 +2,7 @@
 Contributors: Junie
 Tags: ads, adserver, advertisements, tracking, geo-targeting, rotation
 Requires at least: 5.0
-Tested up to: 6.4
+Tested up to: 6.8
 Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -31,7 +31,7 @@ Key features include:
 * **AJAX Serving:** Uses native WordPress AJAX for non-blocking, asynchronous ad delivery.
 * **Shortcode Support:** Easily place ads using shortcodes or script tags.
 
-**Note:** This plugin requires the [Secure Custom Fields](https://wordpress.org/plugins/smart-custom-fields/) plugin to be installed and active.
+**Note:** This plugin requires the [Secure Custom Fields](https://wordpress.org/plugins/secure-custom-fields/) plugin to be installed and active.
 
 == Installation ==
 

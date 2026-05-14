@@ -1,0 +1,56 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# PHP files
+*.php text eol=lf
+
+# JavaScript files
+*.js text eol=lf
+
+# CSS files
+*.css text eol=lf
+
+# HTML files
+*.html text eol=lf
+
+# Text files
+*.txt text eol=lf
+*.md text eol=lf
+
+# JSON/YAML/XML
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.xml text eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+
+# Git/Config files
+.gitattributes text eol=lf
+.gitignore text eol=lf
+.distignore text eol=lf
+.editorconfig text eol=lf
+
+# Image files (binary)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg text eol=lf
+
+# Font files (binary)
+*.woff binary
+*.woff2 binary
+*.eot binary
+*.ttf binary
+
+# Archives (binary)
+*.zip binary
+*.gz binary
+*.tar binary
+
+# Export as-is for WordPress.org SVN deploy
+*.min.js -diff
+*.min.css -diff
