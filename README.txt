@@ -1,9 +1,9 @@
-=== WP AdServer ===
+=== AdServer ===
 Contributors: iteearmah
 Tags: ads, adserver, advertisement, ad-management, geo-targeting, ad-rotation, tracking, impressions, clicks, ad-zones, scheduling, device-targeting
 Requires at least: 5.0
 Tested up to: 6.8
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -12,7 +12,7 @@ Manage, rotate, track, and serve ads with geo-targeting, device targeting, zones
 
 == Description ==
 
-WP AdServer is a powerful and lightweight advertisement management system for WordPress. It allows you to create, manage, and track advertisements with ease.
+AdServer is a powerful and lightweight advertisement management system for WordPress. It allows you to create, manage, and track advertisements with ease.
 
 **Key Features:**
 
@@ -42,13 +42,13 @@ This plugin requires the [Secure Custom Fields](https://wordpress.org/plugins/se
 1. Upload the `wp-adserver` folder to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Install and activate the [Secure Custom Fields](https://wordpress.org/plugins/secure-custom-fields/) plugin.
-4. Go to **WP AdServer** in your admin menu to start creating ads.
+4. Go to **AdServer** in your admin menu to start creating ads.
 
 == Frequently Asked Questions ==
 
 = How do I display an ad? =
 
-Use the shortcode `[wp_adserver zone="your-zone-slug"]` in any post or page. To find the zone slug, go to **WP AdServer > Ad Zones**.
+Use the shortcode `[wp_adserver zone="your-zone-slug"]` in any post or page. To find the zone slug, go to **AdServer > Ad Zones**.
 
 = How do I track statistics? =
 
@@ -56,7 +56,7 @@ Statistics for each ad are displayed in the "Ad Statistics" meta box when editin
 
 = How do I use Ad Zones? =
 
-1. Go to **WP AdServer > Ad Zones** and create a new zone (e.g., "Sidebar").
+1. Go to **AdServer > Ad Zones** and create a new zone (e.g., "Sidebar").
 2. Note the **Slug** of the zone you created.
 3. Edit an advertisement and select the zone from the **Ad Zones** box on the right.
 4. Use the shortcode `[wp_adserver zone="sidebar"]` (replace "sidebar" with your slug) to display ads from that zone.
@@ -79,6 +79,9 @@ An admin notice will be displayed prompting you to install the required plugin. 
 5. Dashboard widget showing quick ad performance stats.
 
 == Changelog ==
+
+= 1.4.0 =
+* Renamed plugin display name from "WP AdServer" to "AdServer" for WordPress.org directory compliance.
 
 = 1.3.0 =
 * Security audit: added input sanitization, output escaping, and URL validation across all files.
@@ -118,6 +121,9 @@ An admin notice will be displayed prompting you to install the required plugin. 
 * Detailed impression and click tracking with admin dashboard statistics.
 
 == Upgrade Notice ==
+
+= 1.4.0 =
+Plugin renamed to "AdServer" for WordPress.org compliance. No functional changes.
 
 = 1.3.0 =
 Security hardening release with input sanitization, output escaping, and WordPress best practices. Recommended for all users.

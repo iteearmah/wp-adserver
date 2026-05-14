@@ -15,7 +15,7 @@ class WP_AdServer_Post_Types {
 		$labels = array(
 			'name'               => 'Ads',
 			'singular_name'      => 'Ad',
-			'menu_name'          => 'WP AdServer',
+			'menu_name'          => 'AdServer',
 			'name_admin_bar'     => 'Ad',
 			'add_new'            => 'Add New',
 			'add_new_item'       => 'Add New Ad',

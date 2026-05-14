@@ -76,7 +76,7 @@ class WP_AdServer_Admin {
 	public static function render_tools_page() {
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'WP AdServer Tools', 'wp-adserver' ); ?></h1>
+			<h1><?php esc_html_e( 'AdServer Tools', 'wp-adserver' ); ?></h1>
 			<hr>
 
 			<div class="card">
@@ -238,7 +238,7 @@ class WP_AdServer_Admin {
 		if ( current_user_can( 'edit_ads' ) ) {
 			wp_add_dashboard_widget(
 				'wp_adserver_stats_widget',
-				esc_html__( 'WP AdServer Quick Stats', 'wp-adserver' ),
+				esc_html__( 'AdServer Quick Stats', 'wp-adserver' ),
 				array( __CLASS__, 'render_dashboard_widget' )
 			);
 		}

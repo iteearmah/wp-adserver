@@ -101,7 +101,7 @@ class WP_AdServer_Renderer {
 
 		if ( ! $html && current_user_can( 'manage_options' ) ) {
 			$html = '<div style="border:1px dashed #ccc; padding:10px; color:#666; font-size:12px;">';
-			$html .= 'WP AdServer: No eligible ads found for zone "' . esc_html( $zone ) . '".';
+			$html .= 'AdServer: No eligible ads found for zone "' . esc_html( $zone ) . '".';
 			if ( $debug_info ) {
 				$html .= '<br>Reason: ' . esc_html( $debug_info );
 			}

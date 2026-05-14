@@ -272,7 +272,7 @@ class WP_AdServer_Tracking {
 			
 			if ( ! $ad_html ) {
 				if ( current_user_can( 'manage_options' ) ) {
-					$error_msg = 'WP AdServer: No eligible ads found for zone "' . esc_html( $zone ) . '".';
+					$error_msg = 'AdServer: No eligible ads found for zone "' . esc_html( $zone ) . '".';
 					if ( $debug_info ) {
 						$error_msg .= ' Reason: ' . esc_html( $debug_info );
 					}
@@ -280,7 +280,7 @@ class WP_AdServer_Tracking {
 				} else {
 					// Add a comment to the JS output for debugging instead of silent exit
 					if ( $uid ) {
- 					echo '// WP AdServer: No eligible ads found for zone ' . wp_json_encode( $zone );
+ 					echo '// AdServer: No eligible ads found for zone ' . wp_json_encode( $zone );
 					}
 					exit;
 				}

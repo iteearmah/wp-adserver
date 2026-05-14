@@ -110,7 +110,7 @@ class WP_AdServer_Reports {
 
 		?>
 		<div class="wrap wp-adserver-reports">
-			<h1><?php esc_html_e( 'WP AdServer Reports', 'wp-adserver' ); ?></h1>
+			<h1><?php esc_html_e( 'AdServer Reports', 'wp-adserver' ); ?></h1>
 
 			<div class="report-filters card">
 				<form method="get" action="">

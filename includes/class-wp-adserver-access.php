@@ -179,7 +179,7 @@ class WP_AdServer_Access {
 		$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'user_access';
 		?>
 		<div class="wrap wp-adserver-settings">
-			<h1 class="wp-heading-inline">WP AdServer Access Configuration</h1>
+			<h1 class="wp-heading-inline">AdServer Access Configuration</h1>
 			<hr class="wp-header-end">
 
 			<nav class="nav-tab-wrapper wp-adserver-tabs">
@@ -194,7 +194,7 @@ class WP_AdServer_Access {
 					<?php if ( $active_tab === 'user_access' ) : ?>
 						<div class="card">
 							<h2>User Access Whitelist</h2>
-							<p class="description">Restrict access to the WP AdServer management section to specific users. Administrators always have access.</p>
+							<p class="description">Restrict access to the AdServer management section to specific users. Administrators always have access.</p>
 							<table class="form-table">
 								<?php if ( function_exists( 'acf_render_field_wrap' ) ) : ?>
 									<tr>
