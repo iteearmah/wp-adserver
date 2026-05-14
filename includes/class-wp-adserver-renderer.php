@@ -68,8 +68,8 @@ class WP_AdServer_Renderer {
 	}
 
 	public static function enqueue_scripts() {
-		wp_register_style( 'wp-adserver', plugins_url( '../assets/css/style.css', __FILE__ ) );
-		wp_register_script( 'wp-adserver-js', plugins_url( '../assets/js/wp-adserver.js', __FILE__ ), array(), '1.3.0', true );
+  wp_register_style( 'wp-adserver', plugins_url( '../assets/css/style.css', __FILE__ ), array(), WP_ADSERVER_VERSION );
+		wp_register_script( 'wp-adserver-js', plugins_url( '../assets/js/wp-adserver.js', __FILE__ ), array(), WP_ADSERVER_VERSION, true );
 		wp_localize_script( 'wp-adserver-js', 'wpAdServer', array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 		) );
@@ -168,7 +168,7 @@ class WP_AdServer_Renderer {
 
 		if ( empty( $ads ) ) {
 			$debug_info = 'No ads assigned to this zone or no published ads found.';
-			
+
 			// Check if any ads exist in this zone but are drafts/scheduled
 			if ( ! empty( $zone_slug ) ) {
 				$all_ads_in_zone = $wpdb->get_col( $wpdb->prepare(
@@ -220,7 +220,7 @@ class WP_AdServer_Renderer {
 		$visitor_country = WP_AdServer_Tracking::get_visitor_country();
 		$visitor_device  = WP_AdServer_Tracking::get_visitor_device();
 		$now = current_time( 'Y-m-d H:i:s' );
-		
+
 		$reasons = array();
 		if ( current_user_can( 'manage_options' ) ) {
 			$reasons[] = "Visitor context: Country: {$visitor_country}, Device: {$visitor_device}, Time: {$now}";
@@ -232,7 +232,7 @@ class WP_AdServer_Renderer {
 			// Check Active
 			$is_active = self::get_cached_field( 'wp_ad_active', $ad_id );
 			if ( $is_active === false || $is_active === 0 || $is_active === '0' ) {
-				$reasons[] = "Ad '{$ad_title}' (ID: {$ad_id}) is inactive (Value: " . json_encode($is_active) . ").";
+ 			$reasons[] = "Ad '{$ad_title}' (ID: {$ad_id}) is inactive (Value: " . wp_json_encode( $is_active ) . ").";
 				continue;
 			}
 
@@ -340,7 +340,7 @@ class WP_AdServer_Renderer {
 		if ( $type === 'image' ) {
 			$image_url = self::get_cached_field( 'wp_ad_image', $selected_ad_id );
 			$click_url = add_query_arg( 'wp_ad_click', $selected_ad_id, home_url( '/' ) );
-			
+
 			$output = sprintf(
 				'<div class="wp-adserver-ad"><a href="%s" target="_blank"><img src="%s" style="max-width:100%%; height:auto;"></a></div>',
 				esc_url( $click_url ),

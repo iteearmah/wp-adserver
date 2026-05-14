@@ -163,8 +163,8 @@ class WP_AdServer_Access {
 			if ( function_exists( 'acf_maybe_get_field' ) ) {
 				// We need to manually update the field since we are not using acf_form()
 				$field_key = 'field_wp_adserver_allowed_users_list';
-				if ( isset( $_POST['acf'][$field_key] ) ) {
-					$acf_value = wp_unslash( $_POST['acf'][$field_key] );
+				if ( isset( $_POST['acf'][ $field_key ] ) ) {
+					$acf_value = array_map( 'absint', (array) wp_unslash( $_POST['acf'][ $field_key ] ) );
 					update_field( $field_key, $acf_value, 'option' );
 				}
 			}
@@ -176,7 +176,7 @@ class WP_AdServer_Access {
 		$caps  = self::get_capabilities();
 		$allowed_users = get_option( 'wp_adserver_allowed_users', '' );
 
-		$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'user_access';
+		$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'user_access';
 		?>
 		<div class="wrap wp-adserver-settings">
 			<h1 class="wp-heading-inline">WP AdServer Access Configuration</h1>
@@ -285,7 +285,9 @@ class WP_AdServer_Access {
 			return;
 		}
 
-		$submitted_caps = isset( $_POST['role_caps'] ) ? (array) $_POST['role_caps'] : array();
+		$submitted_caps = isset( $_POST['role_caps'] ) ? array_map( function( $caps ) {
+			return array_map( 'absint', (array) $caps );
+		}, (array) wp_unslash( $_POST['role_caps'] ) ) : array();
 		$roles = wp_roles();
 		$available_caps = self::get_capabilities();
 

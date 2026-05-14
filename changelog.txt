@@ -1,3 +1,12 @@
+= 1.3.0 =
+* Security audit: added input sanitization, output escaping, and URL validation across all files.
+* Hardened click redirect with wp_http_validate_url() and wp_safe_redirect() fallback.
+* Secured import functionality with uploaded file checks and post data sanitization.
+* Replaced json_encode with wp_json_encode and date() with gmdate() for best practices.
+* Added Text Domain and Domain Path headers for i18n compliance.
+* Added proper cleanup of tracking table and transients on uninstall.
+* Updated git configuration files (.gitignore, .gitattributes, .distignore, .editorconfig).
+
 = 1.2.0 =
 * Fixed ad serving reliability for non-public post types in AJAX contexts using direct database queries.
 * Improved cache invalidation with versioned transients and hooks for all ad status changes.
@@ -20,6 +29,15 @@
 * Ad scheduling and performance capping (impressions/clicks).
 * Zone-based ad delivery.
 * Detailed impression and click tracking with admin dashboard statistics.
+
+1.3.0 - 2026-05-14
+- Security audit: added input sanitization, output escaping, and URL validation across all files.
+- Hardened click redirect with wp_http_validate_url() and wp_safe_redirect() fallback.
+- Secured import with uploaded file checks and post data sanitization.
+- Replaced json_encode with wp_json_encode and date() with gmdate().
+- Added Text Domain and Domain Path headers for i18n compliance.
+- Added tracking table and transient cleanup on uninstall.
+- Updated git config files (.gitignore, .gitattributes, .distignore, .editorconfig).
 
 1.2.0 - 2026-05-14
 - Fixed ad serving for non-public post types by using direct $wpdb queries, bypassing capability/visibility filters in AJAX.

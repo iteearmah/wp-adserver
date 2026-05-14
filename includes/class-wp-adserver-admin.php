@@ -51,8 +51,8 @@ class WP_AdServer_Admin {
 	public static function enqueue_admin_assets( $hook ) {
 		$screen = get_current_screen();
 		if ( $screen && $screen->post_type === 'wp_ad' ) {
-			wp_enqueue_style( 'wp-adserver-admin', plugins_url( '../assets/css/admin.css', __FILE__ ), array(), '1.1.0' );
-			wp_enqueue_script( 'wp-adserver-admin', plugins_url( '../assets/js/admin.js', __FILE__ ), array( 'jquery' ), '1.1.0', true );
+   wp_enqueue_style( 'wp-adserver-admin', plugins_url( '../assets/css/admin.css', __FILE__ ), array(), WP_ADSERVER_VERSION );
+			wp_enqueue_script( 'wp-adserver-admin', plugins_url( '../assets/js/admin.js', __FILE__ ), array( 'jquery' ), WP_ADSERVER_VERSION, true );
 		}
 	}
 
@@ -142,8 +142,8 @@ class WP_AdServer_Admin {
 			$export_data[] = $ad_data;
 		}
 
-		$json_data = json_encode( $export_data, JSON_PRETTY_PRINT );
-		$filename = 'wp-adserver-export-' . date( 'Y-m-d-H-i-s' ) . '.json';
+  $json_data = wp_json_encode( $export_data, JSON_PRETTY_PRINT );
+  $filename = 'wp-adserver-export-' . gmdate( 'Y-m-d-H-i-s' ) . '.json';
 
 		header( 'Content-Type: application/json' );
 		header( 'Content-Disposition: attachment; filename=' . $filename );
@@ -172,7 +172,11 @@ class WP_AdServer_Admin {
 			return;
 		}
 
-		$json_data = file_get_contents( $_FILES['import_file']['tmp_name'] );
+		$tmp_file = $_FILES['import_file']['tmp_name'];
+		if ( ! is_uploaded_file( $tmp_file ) ) {
+			return;
+		}
+		$json_data = file_get_contents( $tmp_file );
 		$ads_data = json_decode( $json_data, true );
 
 		if ( ! is_array( $ads_data ) ) {
@@ -184,10 +188,13 @@ class WP_AdServer_Admin {
 
 		$count = 0;
 		foreach ( $ads_data as $ad_data ) {
+			$allowed_statuses = array( 'publish', 'draft', 'private', 'pending' );
+			$import_status = isset( $ad_data['post_status'] ) && in_array( $ad_data['post_status'], $allowed_statuses, true ) ? $ad_data['post_status'] : 'draft';
+
 			$new_post = array(
-				'post_title'   => $ad_data['post_title'],
-				'post_content' => $ad_data['post_content'],
-				'post_status'  => $ad_data['post_status'],
+				'post_title'   => sanitize_text_field( $ad_data['post_title'] ),
+				'post_content' => wp_kses_post( $ad_data['post_content'] ),
+				'post_status'  => $import_status,
 				'post_type'    => 'wp_ad',
 			);
 
@@ -200,15 +207,16 @@ class WP_AdServer_Admin {
 						foreach ( $values as $value ) {
 							// If it is serialized, WordPress update_post_meta handles it if we pass it correctly.
 							// But get_post_custom returns strings.
-							$value = maybe_unserialize( $value );
-							update_post_meta( $new_id, $key, $value );
+ 							$value = maybe_unserialize( $value );
+							update_post_meta( $new_id, sanitize_key( $key ), $value );
 						}
 					}
 				}
 
 				// Restore zones
-				if ( ! empty( $ad_data['zones'] ) ) {
-					wp_set_object_terms( $new_id, $ad_data['zones'], 'ad_zone' );
+				if ( ! empty( $ad_data['zones'] ) && is_array( $ad_data['zones'] ) ) {
+					$sanitized_zones = array_map( 'sanitize_title', $ad_data['zones'] );
+					wp_set_object_terms( $new_id, $sanitized_zones, 'ad_zone' );
 				}
 				$count++;
 			}
@@ -247,7 +255,7 @@ class WP_AdServer_Admin {
 		$total_ads = wp_count_posts( 'wp_ad' )->publish;
 
 		// Total impressions and clicks from the custom tracking table
-		$stats = $wpdb->get_row( "SELECT 
+		$stats = $wpdb->get_row( "SELECT
 			COUNT(CASE WHEN event_type = 'impression' THEN 1 END) as total_impressions,
 			COUNT(CASE WHEN event_type = 'click' THEN 1 END) as total_clicks
 			FROM $table_name" );
@@ -285,7 +293,7 @@ class WP_AdServer_Admin {
 		}
 		return $location;
 	}
-	
+
 	/**
 	 * Add "Duplicate" link to post row actions.
 	 */
@@ -318,7 +326,7 @@ class WP_AdServer_Admin {
 	 */
 	public static function handle_duplicate_ad() {
 		$post_id = isset( $_GET['post'] ) ? intval( $_GET['post'] ) : 0;
-		$nonce   = isset( $_GET['nonce'] ) ? sanitize_text_field( $_GET['nonce'] ) : '';
+		$nonce   = isset( $_GET['nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['nonce'] ) ) : '';
 
 		if ( ! $post_id || ! wp_verify_nonce( $nonce, 'wp_adserver_duplicate_' . $post_id ) ) {
 			wp_die( esc_html__( 'Security check failed.', 'wp-adserver' ) );
@@ -365,7 +373,7 @@ class WP_AdServer_Admin {
 			if ( strpos( $key, '_wp_ad_stats_' ) === 0 || in_array( $key, array( '_wp_ad_impressions', '_wp_ad_clicks' ) ) ) {
 				continue;
 			}
-			
+
 			foreach ( $values as $value ) {
 				add_post_meta( $new_post_id, $key, maybe_unserialize( $value ) );
 			}
@@ -497,7 +505,7 @@ class WP_AdServer_Admin {
 			case 'ctr':
 				$impressions = WP_AdServer_Tracking::get_total_stats( $post_id, 'impression' );
 				$clicks = WP_AdServer_Tracking::get_total_stats( $post_id, 'click' );
-				echo $impressions > 0 ? round( ( $clicks / $impressions ) * 100, 2 ) : 0;
+				echo esc_html( $impressions > 0 ? round( ( $clicks / $impressions ) * 100, 2 ) : 0 );
 				echo '%';
 				break;
 			case 'weight':
@@ -547,7 +555,7 @@ class WP_AdServer_Admin {
 	 */
 	public static function ajax_toggle_status() {
 		$post_id = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
-		$nonce   = isset( $_POST['nonce'] ) ? sanitize_text_field( $_POST['nonce'] ) : '';
+		$nonce   = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
 
 		if ( ! $post_id || ! wp_verify_nonce( $nonce, 'wp_ad_status_' . $post_id ) ) {
 			wp_send_json_error( 'Invalid nonce' );

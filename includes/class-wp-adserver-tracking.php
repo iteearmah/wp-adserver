@@ -39,11 +39,11 @@ class WP_AdServer_Tracking {
 			self::track_event( $ad_id, 'click' );
 
 			$dest_url = function_exists( 'get_field' ) ? get_field( 'wp_ad_destination_url', $ad_id ) : get_post_meta( $ad_id, 'wp_ad_destination_url', true );
-			if ( $dest_url ) {
-				wp_redirect( $dest_url );
+			if ( $dest_url && wp_http_validate_url( $dest_url ) ) {
+				wp_redirect( esc_url_raw( $dest_url ) );
 				exit;
 			}
-			wp_redirect( home_url() );
+			wp_safe_redirect( home_url() );
 			exit;
 		}
 	}
@@ -85,7 +85,7 @@ class WP_AdServer_Tracking {
 
 		foreach ( $headers as $header ) {
 			if ( ! empty( $_SERVER[ $header ] ) ) {
-				$visitor_country = strtoupper( $_SERVER[ $header ] );
+				$visitor_country = strtoupper( sanitize_text_field( wp_unslash( $_SERVER[ $header ] ) ) );
 				return $visitor_country;
 			}
 		}
@@ -103,7 +103,7 @@ class WP_AdServer_Tracking {
 			return $visitor_device;
 		}
 
-		$user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : '';
+		$user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
 
 		if ( empty( $user_agent ) ) {
 			$visitor_device = 'desktop';
@@ -280,7 +280,7 @@ class WP_AdServer_Tracking {
 				} else {
 					// Add a comment to the JS output for debugging instead of silent exit
 					if ( $uid ) {
-						echo "// WP AdServer: No eligible ads found for zone " . json_encode($zone);
+ 					echo '// WP AdServer: No eligible ads found for zone ' . wp_json_encode( $zone );
 					}
 					exit;
 				}

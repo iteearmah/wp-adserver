@@ -51,7 +51,7 @@ class WP_AdServer_Reports {
 		) );
 
 		header( 'Content-Type: text/csv; charset=utf-8' );
-		header( 'Content-Disposition: attachment; filename=wp-adserver-report-' . date( 'Y-m-d' ) . '.csv' );
+  header( 'Content-Disposition: attachment; filename=wp-adserver-report-' . gmdate( 'Y-m-d' ) . '.csv' );
 
 		$output = fopen( 'php://output', 'w' );
 		fputcsv( $output, array( __( 'Date', 'wp-adserver' ), __( 'Impressions', 'wp-adserver' ), __( 'Clicks', 'wp-adserver' ), __( 'CTR (%)', 'wp-adserver' ) ) );
@@ -155,21 +155,21 @@ class WP_AdServer_Reports {
 					<div class="stat-icon"><span class="dashicons dashicons-visibility"></span></div>
 					<div class="stat-content">
 						<h3><?php esc_html_e( 'Total Impressions', 'wp-adserver' ); ?></h3>
-						<div class="stat-value"><?php echo number_format( $total_impressions ); ?></div>
+						<div class="stat-value"><?php echo esc_html( number_format( $total_impressions ) ); ?></div>
 					</div>
 				</div>
 				<div class="stat-card stat-clicks">
 					<div class="stat-icon"><span class="dashicons dashicons-external"></span></div>
 					<div class="stat-content">
 						<h3><?php esc_html_e( 'Total Clicks', 'wp-adserver' ); ?></h3>
-						<div class="stat-value"><?php echo number_format( $total_clicks ); ?></div>
+						<div class="stat-value"><?php echo esc_html( number_format( $total_clicks ) ); ?></div>
 					</div>
 				</div>
 				<div class="stat-card stat-ctr">
 					<div class="stat-icon"><span class="dashicons dashicons-chart-area"></span></div>
 					<div class="stat-content">
 						<h3><?php esc_html_e( 'Average CTR', 'wp-adserver' ); ?></h3>
-						<div class="stat-value"><?php echo number_format( $avg_ctr, 2 ); ?>%</div>
+						<div class="stat-value"><?php echo esc_html( number_format( $avg_ctr, 2 ) ); ?>%</div>
 					</div>
 				</div>
 			</div>
@@ -194,30 +194,30 @@ class WP_AdServer_Reports {
 							<?php foreach ( $device_stats as $row ) : ?>
 								<tr>
 									<td><?php echo esc_html( ucfirst( $row->label ) ); ?></td>
-									<td><?php echo number_format( $row->impressions ); ?></td>
-									<td><?php echo number_format( $row->clicks ); ?></td>
-								</tr>
-							<?php endforeach; ?>
-						</tbody>
-					</table>
-				</div>
+  							<td><?php echo esc_html( number_format( $row->impressions ) ); ?></td>
+  							<td><?php echo esc_html( number_format( $row->clicks ) ); ?></td>
+  						</tr>
+  					<?php endforeach; ?>
+  					</tbody>
+  				</table>
+  			</div>
 
-				<div class="card">
-					<h2><?php esc_html_e( 'Top Countries', 'wp-adserver' ); ?></h2>
-					<table class="wp-list-table widefat fixed striped">
-						<thead>
-							<tr>
-								<th><?php esc_html_e( 'Country', 'wp-adserver' ); ?></th>
-								<th><?php esc_html_e( 'Impressions', 'wp-adserver' ); ?></th>
-								<th><?php esc_html_e( 'Clicks', 'wp-adserver' ); ?></th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php foreach ( array_slice( $country_stats, 0, 10) as $row ) : ?>
-								<tr>
-									<td><?php echo esc_html( $row->label ?: __( 'Unknown', 'wp-adserver' ) ); ?></td>
-									<td><?php echo number_format( $row->impressions ); ?></td>
-									<td><?php echo number_format( $row->clicks ); ?></td>
+  				<div class="card">
+  					<h2><?php esc_html_e( 'Top Countries', 'wp-adserver' ); ?></h2>
+  					<table class="wp-list-table widefat fixed striped">
+  						<thead>
+  							<tr>
+  								<th><?php esc_html_e( 'Country', 'wp-adserver' ); ?></th>
+  								<th><?php esc_html_e( 'Impressions', 'wp-adserver' ); ?></th>
+  								<th><?php esc_html_e( 'Clicks', 'wp-adserver' ); ?></th>
+  							</tr>
+  						</thead>
+  						<tbody>
+  							<?php foreach ( array_slice( $country_stats, 0, 10 ) as $row ) : ?>
+  								<tr>
+  									<td><?php echo esc_html( $row->label ?: __( 'Unknown', 'wp-adserver' ) ); ?></td>
+  									<td><?php echo esc_html( number_format( $row->impressions ) ); ?></td>
+  									<td><?php echo esc_html( number_format( $row->clicks ) ); ?></td>
 								</tr>
 							<?php endforeach; ?>
 						</tbody>
@@ -232,10 +232,10 @@ class WP_AdServer_Reports {
 			new Chart(ctx, {
 				type: 'line',
 				data: {
-					labels: <?php echo json_encode( $chart_labels ); ?>,
+					labels: <?php echo wp_json_encode( $chart_labels ); ?>,
 					datasets: [{
 						label: '<?php esc_html_e( 'Impressions', 'wp-adserver' ); ?>',
-						data: <?php echo json_encode( $chart_impressions ); ?>,
+						data: <?php echo wp_json_encode( $chart_impressions ); ?>,
 						borderColor: '#2271b1',
 						backgroundColor: function(context) {
 							const chart = context.chart;
@@ -252,7 +252,7 @@ class WP_AdServer_Reports {
 						pointHoverRadius: 6
 					}, {
 						label: '<?php esc_html_e( 'Clicks', 'wp-adserver' ); ?>',
-						data: <?php echo json_encode( $chart_clicks ); ?>,
+						data: <?php echo wp_json_encode( $chart_clicks ); ?>,
 						borderColor: '#d63638',
 						backgroundColor: function(context) {
 							const chart = context.chart;

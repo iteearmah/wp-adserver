@@ -42,5 +42,10 @@ foreach ( $options as $option ) {
 	delete_option( $option );
 }
 
-// 3. Delete any extra metadata if necessary (though wp_delete_post handles most)
-// If we had custom tables, we would drop them here.
+// 3. Drop the custom tracking table
+$table_name = $wpdb->prefix . 'wp_adserver_tracking';
+$wpdb->query( "DROP TABLE IF EXISTS {$table_name}" );
+
+// 4. Clean up transients and cache version
+delete_option( 'wp_adserver_cache_version' );
+$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_wp_ad_stats_%' OR option_name LIKE '_transient_timeout_wp_ad_stats_%' OR option_name LIKE '_transient_wp_ad_list_%' OR option_name LIKE '_transient_timeout_wp_ad_list_%'" );
