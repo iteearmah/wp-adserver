@@ -62,8 +62,8 @@ class WP_AdServer_Admin {
 	public static function add_tools_menu() {
 		add_submenu_page(
 			'edit.php?post_type=wp_ad',
-			esc_html__( 'Tools', 'wp-adserver' ),
-			esc_html__( 'Tools', 'wp-adserver' ),
+			esc_html__( 'Tools', 'adserver' ),
+			esc_html__( 'Tools', 'adserver' ),
 			'manage_options',
 			'wp-adserver-tools',
 			array( __CLASS__, 'render_tools_page' )
@@ -76,27 +76,27 @@ class WP_AdServer_Admin {
 	public static function render_tools_page() {
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'AdServer Tools', 'wp-adserver' ); ?></h1>
+			<h1><?php esc_html_e( 'AdServer Tools', 'adserver' ); ?></h1>
 			<hr>
 
 			<div class="card">
-				<h2><?php esc_html_e( 'Export Ads', 'wp-adserver' ); ?></h2>
-				<p><?php esc_html_e( 'Export all advertisements and their settings to a JSON file.', 'wp-adserver' ); ?></p>
+				<h2><?php esc_html_e( 'Export Ads', 'adserver' ); ?></h2>
+				<p><?php esc_html_e( 'Export all advertisements and their settings to a JSON file.', 'adserver' ); ?></p>
 				<form method="post" action="">
 					<?php wp_nonce_field( 'wp_adserver_export', 'wp_adserver_export_nonce' ); ?>
 					<input type="hidden" name="wp_adserver_action" value="export_ads">
-					<?php submit_button( esc_html__( 'Export Ads to JSON', 'wp-adserver' ), 'primary', 'submit_export' ); ?>
+					<?php submit_button( esc_html__( 'Export Ads to JSON', 'adserver' ), 'primary', 'submit_export' ); ?>
 				</form>
 			</div>
 
 			<div class="card">
-				<h2><?php esc_html_e( 'Import Ads', 'wp-adserver' ); ?></h2>
-				<p><?php esc_html_e( 'Import advertisements from a previously exported JSON file.', 'wp-adserver' ); ?></p>
+				<h2><?php esc_html_e( 'Import Ads', 'adserver' ); ?></h2>
+				<p><?php esc_html_e( 'Import advertisements from a previously exported JSON file.', 'adserver' ); ?></p>
 				<form method="post" action="" enctype="multipart/form-data">
 					<?php wp_nonce_field( 'wp_adserver_import', 'wp_adserver_import_nonce' ); ?>
 					<input type="hidden" name="wp_adserver_action" value="import_ads">
 					<input type="file" name="import_file" accept=".json" required>
-					<?php submit_button( esc_html__( 'Import Ads from JSON', 'wp-adserver' ), 'secondary', 'submit_import' ); ?>
+					<?php submit_button( esc_html__( 'Import Ads from JSON', 'adserver' ), 'secondary', 'submit_import' ); ?>
 				</form>
 			</div>
 		</div>
@@ -181,7 +181,7 @@ class WP_AdServer_Admin {
 
 		if ( ! is_array( $ads_data ) ) {
 			add_action( 'admin_notices', function() {
-				echo '<div class="error"><p>' . esc_html__( 'Invalid import file format.', 'wp-adserver' ) . '</p></div>';
+				echo '<div class="error"><p>' . esc_html__( 'Invalid import file format.', 'adserver' ) . '</p></div>';
 			} );
 			return;
 		}
@@ -227,7 +227,7 @@ class WP_AdServer_Admin {
 		$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_wp_ad_list_%'" );
 
 		add_action( 'admin_notices', function() use ( $count ) {
-			echo '<div class="updated"><p>' . sprintf( esc_html__( 'Successfully imported %d advertisements.', 'wp-adserver' ), $count ) . '</p></div>';
+			echo '<div class="updated"><p>' . sprintf( esc_html__( 'Successfully imported %d advertisements.', 'adserver' ), $count ) . '</p></div>';
 		} );
 	}
 
@@ -238,7 +238,7 @@ class WP_AdServer_Admin {
 		if ( current_user_can( 'edit_ads' ) ) {
 			wp_add_dashboard_widget(
 				'wp_adserver_stats_widget',
-				esc_html__( 'AdServer Quick Stats', 'wp-adserver' ),
+				esc_html__( 'AdServer Quick Stats', 'adserver' ),
 				array( __CLASS__, 'render_dashboard_widget' )
 			);
 		}
@@ -267,14 +267,14 @@ class WP_AdServer_Admin {
 
 		echo '<div class="wp-adserver-dashboard-widget">';
 		echo '<ul>';
-		echo '<li><strong>' . esc_html__( 'Published Ads:', 'wp-adserver' ) . '</strong> ' . esc_html( $total_ads ) . '</li>';
-		echo '<li><strong>' . esc_html__( 'Total Impressions:', 'wp-adserver' ) . '</strong> ' . esc_html( number_format( $total_impressions ) ) . '</li>';
-		echo '<li><strong>' . esc_html__( 'Total Clicks:', 'wp-adserver' ) . '</strong> ' . esc_html( number_format( $total_clicks ) ) . '</li>';
-		echo '<li><strong>' . esc_html__( 'Overall CTR:', 'wp-adserver' ) . '</strong> ' . esc_html( $ctr ) . '%</li>';
+		echo '<li><strong>' . esc_html__( 'Published Ads:', 'adserver' ) . '</strong> ' . esc_html( $total_ads ) . '</li>';
+		echo '<li><strong>' . esc_html__( 'Total Impressions:', 'adserver' ) . '</strong> ' . esc_html( number_format( $total_impressions ) ) . '</li>';
+		echo '<li><strong>' . esc_html__( 'Total Clicks:', 'adserver' ) . '</strong> ' . esc_html( number_format( $total_clicks ) ) . '</li>';
+		echo '<li><strong>' . esc_html__( 'Overall CTR:', 'adserver' ) . '</strong> ' . esc_html( $ctr ) . '%</li>';
 		echo '</ul>';
 		echo '<p>';
-		echo '<a href="' . esc_url( admin_url( 'edit.php?post_type=wp_ad' ) ) . '" class="button button-primary">' . esc_html__( 'Manage Ads', 'wp-adserver' ) . '</a> ';
-		echo '<a href="' . esc_url( admin_url( 'post-new.php?post_type=wp_ad' ) ) . '" class="button">' . esc_html__( 'Add New Ad', 'wp-adserver' ) . '</a>';
+		echo '<a href="' . esc_url( admin_url( 'edit.php?post_type=wp_ad' ) ) . '" class="button button-primary">' . esc_html__( 'Manage Ads', 'adserver' ) . '</a> ';
+		echo '<a href="' . esc_url( admin_url( 'post-new.php?post_type=wp_ad' ) ) . '" class="button">' . esc_html__( 'Add New Ad', 'adserver' ) . '</a>';
 		echo '</p>';
 		echo '</div>';
 	}
@@ -314,8 +314,8 @@ class WP_AdServer_Admin {
 		$actions['duplicate'] = sprintf(
 			'<a href="%s" aria-label="%s">%s</a>',
 			esc_url( $url ),
-			esc_attr__( 'Duplicate this ad', 'wp-adserver' ),
-			esc_html__( 'Duplicate', 'wp-adserver' )
+			esc_attr__( 'Duplicate this ad', 'adserver' ),
+			esc_html__( 'Duplicate', 'adserver' )
 		);
 
 		return $actions;
@@ -329,16 +329,16 @@ class WP_AdServer_Admin {
 		$nonce   = isset( $_GET['nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['nonce'] ) ) : '';
 
 		if ( ! $post_id || ! wp_verify_nonce( $nonce, 'wp_adserver_duplicate_' . $post_id ) ) {
-			wp_die( esc_html__( 'Security check failed.', 'wp-adserver' ) );
+			wp_die( esc_html__( 'Security check failed.', 'adserver' ) );
 		}
 
 		if ( ! current_user_can( 'edit_ads' ) ) {
-			wp_die( esc_html__( 'You do not have permission to duplicate ads.', 'wp-adserver' ) );
+			wp_die( esc_html__( 'You do not have permission to duplicate ads.', 'adserver' ) );
 		}
 
 		$post = get_post( $post_id );
 		if ( ! $post || $post->post_type !== 'wp_ad' ) {
-			wp_die( esc_html__( 'Post not found.', 'wp-adserver' ) );
+			wp_die( esc_html__( 'Post not found.', 'adserver' ) );
 		}
 
 		$current_user = wp_get_current_user();
@@ -346,7 +346,7 @@ class WP_AdServer_Admin {
 		$new_post_args = array(
 			'post_author' => $current_user->ID,
 			'post_content' => $post->post_content,
-			'post_title' => sprintf( esc_html__( '%s (Copy)', 'wp-adserver' ), $post->post_title ),
+			'post_title' => sprintf( esc_html__( '%s (Copy)', 'adserver' ), $post->post_title ),
 			'post_status' => 'draft',
 			'post_type' => $post->post_type,
 			'post_parent' => $post->post_parent,
@@ -356,7 +356,7 @@ class WP_AdServer_Admin {
 		$new_post_id = wp_insert_post( $new_post_args );
 
 		if ( is_wp_error( $new_post_id ) ) {
-			wp_die( esc_html__( 'Failed to create duplicate post.', 'wp-adserver' ) );
+			wp_die( esc_html__( 'Failed to create duplicate post.', 'adserver' ) );
 		}
 
 		// Duplicate all taxonomies
@@ -388,7 +388,7 @@ class WP_AdServer_Admin {
 	 */
 	public static function show_duplicate_notice() {
 		if ( isset( $_GET['duplicated'] ) && $_GET['duplicated'] == 1 ) {
-			echo '<div class="updated notice is-dismissible"><p>' . esc_html__( 'Advertisement successfully duplicated as a draft.', 'wp-adserver' ) . '</p></div>';
+			echo '<div class="updated notice is-dismissible"><p>' . esc_html__( 'Advertisement successfully duplicated as a draft.', 'adserver' ) . '</p></div>';
 		}
 	}
 
@@ -439,7 +439,7 @@ class WP_AdServer_Admin {
 
 	public static function render_stats_meta_box( $post ) {
 		echo '<table class="widefat fixed striped">';
-		echo '<thead><tr><th>' . esc_html__( 'Date', 'wp-adserver' ) . '</th><th>' . esc_html__( 'Impressions', 'wp-adserver' ) . '</th><th>' . esc_html__( 'Clicks', 'wp-adserver' ) . '</th><th>' . esc_html__( 'CTR', 'wp-adserver' ) . '</th><th>' . esc_html__( 'Top Countries', 'wp-adserver' ) . '</th></tr></thead>';
+		echo '<thead><tr><th>' . esc_html__( 'Date', 'adserver' ) . '</th><th>' . esc_html__( 'Impressions', 'adserver' ) . '</th><th>' . esc_html__( 'Clicks', 'adserver' ) . '</th><th>' . esc_html__( 'CTR', 'adserver' ) . '</th><th>' . esc_html__( 'Top Countries', 'adserver' ) . '</th></tr></thead>';
 		echo '<tbody>';
 
 		$all_stats = WP_AdServer_Tracking::get_ad_stats( $post->ID, 7 );
@@ -453,7 +453,7 @@ class WP_AdServer_Admin {
 			$geo_display   = implode( ', ', array_map( 'esc_html', $top_countries ) ) ?: '-';
 
 			echo '<tr>';
-			echo '<td>' . esc_html( $date ) . ( $date === gmdate( 'Y-m-d' ) ? ' (' . esc_html__( 'Today', 'wp-adserver' ) . ')' : '' ) . '</td>';
+			echo '<td>' . esc_html( $date ) . ( $date === gmdate( 'Y-m-d' ) ? ' (' . esc_html__( 'Today', 'adserver' ) . ')' : '' ) . '</td>';
 			echo '<td>' . esc_html( $imprs ) . '</td>';
 			echo '<td>' . esc_html( $clicks ) . '</td>';
 			echo '<td>' . esc_html( $ctr ) . '%</td>';
@@ -469,14 +469,14 @@ class WP_AdServer_Admin {
 		foreach ( $columns as $key => $value ) {
 			if ( $key === 'title' ) {
 				$new_columns[ $key ] = $value;
-				$new_columns['active'] = esc_html__( 'Status', 'wp-adserver' );
+				$new_columns['active'] = esc_html__( 'Status', 'adserver' );
 				continue;
 			}
 			if ( $key === 'date' ) {
-				$new_columns['impressions'] = esc_html__( 'Impressions', 'wp-adserver' );
-				$new_columns['clicks']      = esc_html__( 'Clicks', 'wp-adserver' );
-				$new_columns['ctr']         = esc_html__( 'CTR', 'wp-adserver' );
-				$new_columns['weight']      = esc_html__( 'Weight', 'wp-adserver' );
+				$new_columns['impressions'] = esc_html__( 'Impressions', 'adserver' );
+				$new_columns['clicks']      = esc_html__( 'Clicks', 'adserver' );
+				$new_columns['ctr']         = esc_html__( 'CTR', 'adserver' );
+				$new_columns['weight']      = esc_html__( 'Weight', 'adserver' );
 			}
 			$new_columns[ $key ] = $value;
 		}
@@ -490,9 +490,9 @@ class WP_AdServer_Admin {
 				$nonce  = wp_create_nonce( 'wp_ad_status_' . $post_id );
 				echo '<div class="wp-ad-status-toggle" data-post-id="' . esc_attr( $post_id ) . '" data-nonce="' . esc_attr( $nonce ) . '" style="cursor: pointer; display: inline-block;">';
 				if ( $active === false || $active === 0 ) {
-					echo '<span class="dashicons dashicons-hidden" style="color:#d63638;" title="' . esc_attr__( 'Inactive', 'wp-adserver' ) . '"></span>';
+					echo '<span class="dashicons dashicons-hidden" style="color:#d63638;" title="' . esc_attr__( 'Inactive', 'adserver' ) . '"></span>';
 				} else {
-					echo '<span class="dashicons dashicons-visibility" style="color:#00a32a;" title="' . esc_attr__( 'Active', 'wp-adserver' ) . '"></span>';
+					echo '<span class="dashicons dashicons-visibility" style="color:#00a32a;" title="' . esc_attr__( 'Active', 'adserver' ) . '"></span>';
 				}
 				echo '</div>';
 				break;
@@ -521,8 +521,8 @@ class WP_AdServer_Admin {
 	}
 
 	public static function add_zone_columns( $columns ) {
-		$columns['zone_shortcode'] = esc_html__( 'Shortcode', 'wp-adserver' );
-		$columns['zone_script']    = esc_html__( 'Script Tag', 'wp-adserver' );
+		$columns['zone_shortcode'] = esc_html__( 'Shortcode', 'adserver' );
+		$columns['zone_script']    = esc_html__( 'Script Tag', 'adserver' );
 		return $columns;
 	}
 
@@ -575,9 +575,9 @@ class WP_AdServer_Admin {
 
 		ob_start();
 		if ( $new_status === 0 ) {
-			echo '<span class="dashicons dashicons-hidden" style="color:#d63638;" title="' . esc_attr__( 'Inactive', 'wp-adserver' ) . '"></span>';
+			echo '<span class="dashicons dashicons-hidden" style="color:#d63638;" title="' . esc_attr__( 'Inactive', 'adserver' ) . '"></span>';
 		} else {
-			echo '<span class="dashicons dashicons-visibility" style="color:#00a32a;" title="' . esc_attr__( 'Active', 'wp-adserver' ) . '"></span>';
+			echo '<span class="dashicons dashicons-visibility" style="color:#00a32a;" title="' . esc_attr__( 'Active', 'adserver' ) . '"></span>';
 		}
 		$html = ob_get_clean();
 

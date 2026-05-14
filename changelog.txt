@@ -1,3 +1,9 @@
+= 1.5.0 =
+* Fixed automated plugin scan issues: added sanitize_callback to register_setting() calls.
+* Updated "Tested up to" to WordPress 6.9.
+* Changed Text Domain to "adserver" to match plugin slug.
+* Created languages directory for Domain Path compliance.
+
 = 1.4.0 =
 * Renamed plugin display name from "WP AdServer" to "AdServer" for WordPress.org directory compliance.
 

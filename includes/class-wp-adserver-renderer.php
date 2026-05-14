@@ -68,7 +68,7 @@ class WP_AdServer_Renderer {
 	}
 
 	public static function enqueue_scripts() {
-  wp_register_style( 'wp-adserver', plugins_url( '../assets/css/style.css', __FILE__ ), array(), WP_ADSERVER_VERSION );
+  wp_register_style( 'adserver', plugins_url( '../assets/css/style.css', __FILE__ ), array(), WP_ADSERVER_VERSION );
 		wp_register_script( 'wp-adserver-js', plugins_url( '../assets/js/wp-adserver.js', __FILE__ ), array(), WP_ADSERVER_VERSION, true );
 		wp_localize_script( 'wp-adserver-js', 'wpAdServer', array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
@@ -81,7 +81,7 @@ class WP_AdServer_Renderer {
 		), $atts );
 
 		// Only enqueue frontend assets if the shortcode is used
-		wp_enqueue_style( 'wp-adserver' );
+		wp_enqueue_style( 'adserver' );
 		wp_enqueue_script( 'wp-adserver-js' );
 
 		$zone_slug = ! empty( $atts['zone'] ) ? strtolower( sanitize_title( $atts['zone'] ) ) : 'default';

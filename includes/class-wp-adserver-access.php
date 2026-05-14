@@ -57,7 +57,7 @@ class WP_AdServer_Access {
 		}
 
 		$allowed_user_ids = function_exists( 'get_field' ) ? get_field( 'wp_adserver_allowed_users_list', 'option' ) : array();
-		
+
 		// Fallback to old username-based whitelist if the new one is empty
 		if ( empty( $allowed_user_ids ) ) {
 			$allowed_users_raw = get_option( 'wp_adserver_allowed_users', '' );
@@ -112,8 +112,16 @@ class WP_AdServer_Access {
 	}
 
 	public static function register_settings() {
-		register_setting( 'wp_adserver_access_group', 'wp_adserver_role_caps' );
-		register_setting( 'wp_adserver_access_group', 'wp_adserver_allowed_users' );
+		register_setting( 'wp_adserver_access_group', 'wp_adserver_role_caps', array(
+			'type'              => 'array',
+			'sanitize_callback' => array( __CLASS__, 'sanitize_role_caps' ),
+			'default'           => array(),
+		) );
+		register_setting( 'wp_adserver_access_group', 'wp_adserver_allowed_users', array(
+			'type'              => 'string',
+			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => '',
+		) );
 
 		// Register the SCF/ACF options page slug so it's recognized
 		if ( function_exists( 'acf_add_options_page' ) ) {
@@ -144,21 +152,21 @@ class WP_AdServer_Access {
 
 	public static function render_settings_page() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'wp-adserver' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'adserver' ) );
 		}
 
 		// Ensure SCF is fully ready if available
 		if ( function_exists( 'acf_render_field_wrap' ) ) {
 			acf_enqueue_scripts();
 		} else {
-			echo '<div class="notice notice-error"><p>' . esc_html__( 'The Secure Custom Fields plugin must be active to manage access settings.', 'wp-adserver' ) . '</p></div>';
+			echo '<div class="notice notice-error"><p>' . esc_html__( 'The Secure Custom Fields plugin must be active to manage access settings.', 'adserver' ) . '</p></div>';
 			return;
 		}
 
 		if ( isset( $_POST['wp_adserver_save_access'] ) && check_admin_referer( 'wp_adserver_access_nonce' ) ) {
 			self::save_role_caps();
 			self::save_allowed_users();
-			
+
 			// Save SCF fields if available
 			if ( function_exists( 'acf_maybe_get_field' ) ) {
 				// We need to manually update the field since we are not using acf_form()
@@ -190,7 +198,7 @@ class WP_AdServer_Access {
 			<div class="wp-adserver-tab-content">
 				<form method="post">
 					<?php wp_nonce_field( 'wp_adserver_access_nonce' ); ?>
-					
+
 					<?php if ( $active_tab === 'user_access' ) : ?>
 						<div class="card">
 							<h2>User Access Whitelist</h2>
@@ -278,6 +286,29 @@ class WP_AdServer_Access {
 			</div>
 		</div>
 		<?php
+	}
+
+	public static function sanitize_role_caps( $input ) {
+		if ( ! is_array( $input ) ) {
+			return array();
+		}
+		$sanitized = array();
+		$valid_roles = array_keys( wp_roles()->roles );
+		$valid_caps  = array_keys( self::get_capabilities() );
+		foreach ( $input as $role => $caps ) {
+			$role = sanitize_key( $role );
+			if ( ! in_array( $role, $valid_roles, true ) ) {
+				continue;
+			}
+			$sanitized[ $role ] = array();
+			foreach ( (array) $caps as $cap => $val ) {
+				$cap = sanitize_key( $cap );
+				if ( in_array( $cap, $valid_caps, true ) ) {
+					$sanitized[ $role ][ $cap ] = absint( $val );
+				}
+			}
+		}
+		return $sanitized;
 	}
 
 	private static function save_role_caps() {
