@@ -51,6 +51,24 @@
 *.gz binary
 *.tar binary
 
-# Export as-is for WordPress.org SVN deploy
+# Minified assets
 *.min.js -diff
 *.min.css -diff
+
+# Export ignore (excluded from git archive)
+.gitattributes export-ignore
+.gitignore export-ignore
+.distignore export-ignore
+.github/ export-ignore
+composer.json export-ignore
+composer.lock export-ignore
+node_modules/ export-ignore
+package.json export-ignore
+package-lock.json export-ignore
+phpunit.xml export-ignore
+tests/ export-ignore
+bin/ export-ignore
+*.sh export-ignore
+*.map export-ignore
+README.md export-ignore
+CHANGELOG.md export-ignore

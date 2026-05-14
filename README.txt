@@ -3,7 +3,7 @@ Contributors: Junie
 Tags: ads, adserver, advertisements, tracking, geo-targeting, rotation
 Requires at least: 5.0
 Tested up to: 6.8
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -56,6 +56,13 @@ Statistics for each ad are displayed in the "Ad Statistics" meta box when editin
 5. You can also use `<div id="wp-ad-sidebar"></div><script src="https://your-site.com/?wp_ad_serve=1&zone=sidebar&uid=wp-ad-sidebar" async></script>` for remote placement.
 
 == Changelog ==
+
+= 1.2.0 =
+* Fixed ad serving reliability for non-public post types in AJAX contexts using direct database queries.
+* Improved cache invalidation with versioned transients and hooks for all ad status changes.
+* Enhanced administrator debug output with visitor context, filtering reasons, and ad status details.
+* Standardized zone slug handling to lowercase across shortcodes and AJAX handlers.
+* Added .gitattributes with export-ignore directives for clean distribution archives.
 
 = 1.1.0 =
 * Security: Added nonce verification and capability checks for settings.

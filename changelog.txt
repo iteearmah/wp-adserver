@@ -1,3 +1,10 @@
+= 1.2.0 =
+* Fixed ad serving reliability for non-public post types in AJAX contexts using direct database queries.
+* Improved cache invalidation with versioned transients and hooks for all ad status changes.
+* Enhanced administrator debug output with visitor context, filtering reasons, and ad status details.
+* Standardized zone slug handling to lowercase across shortcodes and AJAX handlers.
+* Added .gitattributes with export-ignore directives for clean distribution archives.
+
 = 1.1.0 =
 * Migrated the "Allowed Usernames" whitelist to a modern user selection system using Secure Custom Fields (SCF).
 * Enhanced security and reliability by switching from username-based filtering to user ID-based filtering.
@@ -13,6 +20,13 @@
 * Ad scheduling and performance capping (impressions/clicks).
 * Zone-based ad delivery.
 * Detailed impression and click tracking with admin dashboard statistics.
+
+1.2.0 - 2026-05-14
+- Fixed ad serving for non-public post types by using direct $wpdb queries, bypassing capability/visibility filters in AJAX.
+- Improved cache invalidation with versioned transients and status transition hooks.
+- Enhanced admin debug output with visitor context, filtering reasons, and granular ad status details.
+- Standardized zone slug handling to lowercase across all entry points.
+- Added .gitattributes with export-ignore directives for clean distribution archives.
 
 1.1.0 - 2026-05-12
 - Analytics: Added a professional reporting dashboard with interactive charts.
