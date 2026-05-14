@@ -4,7 +4,7 @@
 Plugin Name: AdServer
 Plugin URI: https://github.com/iteearmah/wp-adserver
 Description: A specialized plugin to manage, rotate, track, and serve advertisements.
-Version: 1.6.0
+Version: 1.7.0
 Author: Samuel Attoh Armah
 Author URI: https://github.com/iteearmah
 License: GPL2
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WP_ADSERVER_VERSION', '1.6.0' );
+define( 'WP_ADSERVER_VERSION', '1.7.0' );
 
 // Load the modular system
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-wp-adserver-loader.php';

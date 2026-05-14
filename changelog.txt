@@ -1,3 +1,7 @@
+= 1.7.0 =
+* Removed hidden .gitkeep file from languages directory to comply with WordPress.org guidelines.
+* Added index.php to languages directory to maintain the folder structure safely.
+
 = 1.6.0 =
 * Finalized text domain migration to "adserver" across all files.
 * Verified WordPress.org automated scan fixes and bumped version for clean submission.
@@ -42,6 +46,10 @@
 * Ad scheduling and performance capping (impressions/clicks).
 * Zone-based ad delivery.
 * Detailed impression and click tracking with admin dashboard statistics.
+
+1.7.0 - 2026-05-14
+- Removed hidden .gitkeep file from languages directory to comply with WordPress.org guidelines.
+- Added index.php to languages directory.
 
 1.6.0 - 2026-05-14
 - Finalized text domain migration to "adserver" across all files.

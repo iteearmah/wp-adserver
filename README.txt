@@ -3,7 +3,7 @@ Contributors: iteearmah
 Tags: ads, adserver, advertisement, ad-management, geo-targeting, ad-rotation, tracking, impressions, clicks, ad-zones, scheduling, device-targeting
 Requires at least: 5.0
 Tested up to: 6.9
-Stable tag: 1.6.0
+Stable tag: 1.7.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -80,6 +80,10 @@ An admin notice will be displayed prompting you to install the required plugin. 
 
 == Changelog ==
 
+= 1.7.0 =
+* Removed hidden .gitkeep file from languages directory to comply with WordPress.org guidelines.
+* Added index.php to languages directory to maintain the folder structure safely.
+
 = 1.6.0 =
 * Finalized text domain migration to "adserver" across all files.
 * Verified WordPress.org automated scan fixes and bumped version for clean submission.
@@ -131,6 +135,9 @@ An admin notice will be displayed prompting you to install the required plugin. 
 * Detailed impression and click tracking with admin dashboard statistics.
 
 == Upgrade Notice ==
+
+= 1.7.0 =
+Compliance fix: replaced hidden .gitkeep with index.php in languages directory.
 
 = 1.6.0 =
 Final text domain fixes and version bump for WordPress.org submission.
