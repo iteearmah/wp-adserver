@@ -410,7 +410,7 @@ class WP_AdServer_Admin {
 	}
 
 	public static function custom_upload_dir( $uploads ) {
-		$subdir = '/wp-adserver';
+  $subdir = '/adserver';
 		$uploads['subdir'] = $subdir . $uploads['subdir'];
 		$uploads['path']   = $uploads['basedir'] . $uploads['subdir'];
 		$uploads['url']    = $uploads['baseurl'] . $uploads['subdir'];

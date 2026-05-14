@@ -1,3 +1,7 @@
+= 1.6.0 =
+* Finalized text domain migration to "adserver" across all files.
+* Verified WordPress.org automated scan fixes and bumped version for clean submission.
+
 = 1.5.0 =
 * Fixed automated plugin scan issues: added sanitize_callback to register_setting() calls.
 * Updated "Tested up to" to WordPress 6.9.
@@ -38,6 +42,16 @@
 * Ad scheduling and performance capping (impressions/clicks).
 * Zone-based ad delivery.
 * Detailed impression and click tracking with admin dashboard statistics.
+
+1.6.0 - 2026-05-14
+- Finalized text domain migration to "adserver" across all files.
+- Verified WordPress.org automated scan fixes and bumped version for clean submission.
+
+1.5.0 - 2026-05-14
+- Fixed automated plugin scan issues: added sanitize_callback to register_setting() calls.
+- Updated "Tested up to" to WordPress 6.9.
+- Changed Text Domain to "adserver" to match plugin slug.
+- Created languages directory for Domain Path compliance.
 
 1.4.0 - 2026-05-14
 - Renamed plugin display name from "WP AdServer" to "AdServer" for WordPress.org directory compliance.
